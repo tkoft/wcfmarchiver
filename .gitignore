@@ -1,4 +1,5 @@
 build/
+archives/
 out.txt
 *.spec
 
