@@ -42,7 +42,7 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-THRESHOLD = 150
+THRESHOLD = 250
 
 # setup variables, data structs, files
 quit = False
