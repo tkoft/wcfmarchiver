@@ -1,3 +1,11 @@
+build/
+
+*.spec
+
+#===========================
+# DEFAULT WINDOWS FILES
+#============================
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
