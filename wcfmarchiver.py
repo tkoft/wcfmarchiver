@@ -44,7 +44,7 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-THRESHOLD = 600
+THRESHOLD = 150
 
 # setup variables, data structs, files
 quit = False
@@ -127,7 +127,6 @@ while not quitPressed():
 
 
 	# no silence detected
-	print(maxVol)
 	if (maxVol >= THRESHOLD):
 		# write +/-5 min at bottom of hour, and record into framesOverlap
 		framesOverlap = []
