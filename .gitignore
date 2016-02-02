@@ -2,6 +2,7 @@ build/
 archives/
 out.txt
 *.spec
+*.wav
 
 #===========================
 # DEFAULT WINDOWS FILES

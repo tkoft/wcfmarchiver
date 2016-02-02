@@ -127,6 +127,9 @@ while not quitPressed():
 	wf.setframerate(RATE)
 	fileNames.append("archives/" + fileName)
 
+	# log file name
+	log.write("\n" + fileName + " \t")
+
 	# write -5 minutes from top of hour to file
 	wf.writeframes(b''.join(framesOverlap))
 
@@ -156,8 +159,8 @@ while not quitPressed():
 		# close audio file
 		wf.close()
 
-		# write to log
-		log.write(fileName + " \t" + time.asctime(localtime) + "\n")
+		# write time to log
+		log.write(time.asctime(localtime))
 		log.flush()
 
 		output("* done recording: \tarchives/" + fileName)
@@ -165,11 +168,13 @@ while not quitPressed():
 	
 	# silence detected
 	else:
+		# remove file
 		wf.close()
 		os.remove("archives/"+fileName)
 		fileNames.pop(len(fileNames)-1)
 		output("* DELETED SILENCE:  \tarchives/"+fileName)
 
+		#record padding for next file
 		output("* still recording padding...")
 		framesOverlap = []
 		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_SEC):
