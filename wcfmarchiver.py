@@ -57,6 +57,13 @@ hr = time.localtime(time.time()).tm_hour
 if not os.path.exists("archives"):
 	os.makedirs("archives")
 log = open("archives/outputLog.txt", "a+")
+out = open("out.txt", "a+")
+
+def output(mes):
+	global out
+	print(mes)
+	out.write(mes)
+	out.write("\n")
 
 def quitPressed():
 	global quit
@@ -65,18 +72,19 @@ def quitPressed():
    			quit = True
 	return quit
 
-print("------------------------------------------------------------")		
-print("| WCFM ARCHIVER by Gary Chen '18")
-print("| interval: \t\t" + str(RECORD_SECONDS/60) + " min")
-print("| padding: \t\t" + str(PAD_OVERLAP/60) + " min")
-print("| max # of files: \t" + str(MAX_FILES))
-print("| approx size on disk: \t" + str(11*(RECORD_MIN+2*PAD_MIN)*MAX_FILES/1000) + " GB")
 
-print("| capturing audio...")
+output("------------------------------------------------------------")		
+output("| WCFM ARCHIVER by Gary Chen '18")
+output("| interval: \t\t" + str(RECORD_SECONDS/60) + " min")
+output("| padding: \t\t" + str(PAD_OVERLAP/60) + " min")
+output("| max # of files: \t" + str(MAX_FILES))
+output("| approx size on disk: \t" + str(11*(RECORD_MIN+2*PAD_MIN)*MAX_FILES/1000) + " GB")
+
+output("| capturing audio...")
 
 stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
 
-print("------------------------------------------------------------")
+output("------------------------------------------------------------")
 
 # MAIN RECORDING LOOP
 while not quitPressed():
@@ -101,10 +109,10 @@ while not quitPressed():
 		toDelete = fileNames.pop(0)
 		if (toDelete != None):
 			os.remove(toDelete)
-			print("* DELETED: \t\t" + toDelete)
+			output("* DELETED: \t\t" + toDelete)
 
 	# open file
-	print("* now writing to: \tarchives/" + fileName)
+	output("* now writing to: \tarchives/" + fileName)
 	wf = wave.open("archives/" + fileName, 'wb')
 	wf.setnchannels(CHANNELS)
 	wf.setsampwidth(p.get_sample_size(FORMAT))
@@ -144,17 +152,17 @@ while not quitPressed():
 		log.write(fileName + " \t" + time.asctime(localtime) + "\n")
 		log.flush()
 
-		print("* done recording: \tarchives/" + fileName)
-		print("------------------------------------------------------------")
+		output("* done recording: \tarchives/" + fileName)
+		output("------------------------------------------------------------")
 	
 	# silence detected
 	else:
 		wf.close()
 		os.remove("archives/"+fileName)
 		fileNames.pop(len(fileNames)-1)
-		print("* DELETED SILENCE:  \tarchives/"+fileName)
+		output("* DELETED SILENCE:  \tarchives/"+fileName)
 
-		print("* still recording padding...")
+		output("* still recording padding...")
 		framesOverlap = []
 		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_OVERLAP):
 			data = stream.read(CHUNK)
