@@ -1,0 +1,1 @@
+pyinstaller -F wcfmarchiver.py
