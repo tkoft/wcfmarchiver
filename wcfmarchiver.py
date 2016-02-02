@@ -27,6 +27,7 @@ import pyaudio
 import wave
 import time
 import os.path
+import msvcrt
 from collections import deque
 from array import array
 
@@ -43,9 +44,10 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-THRESHOLD = 500
+THRESHOLD = 600
 
 # setup variables, data structs, files
+quit = False
 p = pyaudio.PyAudio()
 framesOverlap = []
 frame = []
@@ -55,6 +57,13 @@ hr = time.localtime(time.time()).tm_hour
 if not os.path.exists("archives"):
 	os.makedirs("archives")
 log = open("archives/outputLog.txt", "a+")
+
+def quitPressed():
+	global quit
+	if (msvcrt.kbhit()):
+   		if (ord(msvcrt.getch()) == 113):
+   			quit = True
+	return quit
 
 print("------------------------------------------------------------")		
 print("| WCFM ARCHIVER by Gary Chen '18")
@@ -70,7 +79,7 @@ stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_
 print("------------------------------------------------------------")
 
 # MAIN RECORDING LOOP
-while True:
+while not quitPressed():
 	# refresh the time; should be five minutes into hour or script start time
 	# also reset file count if new day
 	localtime = time.localtime(time.time())
@@ -105,9 +114,9 @@ while True:
 	# write -5 minutes from top of hour to file
 	wf.writeframes(b''.join(framesOverlap))
 
-	# write 55 min into the hour
+	# write 55 min into the hour, or until keypress
 	maxVol = 1
-	while (int(time.time())%RECORD_SECONDS != (RECORD_SECONDS - PAD_OVERLAP)):
+	while (not quitPressed() and int(time.time())%RECORD_SECONDS != (RECORD_SECONDS - PAD_OVERLAP)):
 	   data = stream.read(CHUNK)
 	   frame.append(data)
 	   bitArr = array('h', data)
@@ -116,11 +125,13 @@ while True:
 	   wf.writeframes(b''.join(frame))
 	   frame = []
 
+
 	# no silence detected
+	print(maxVol)
 	if (maxVol >= THRESHOLD):
 		# write +/-5 min at bottom of hour, and record into framesOverlap
 		framesOverlap = []
-		while (int(time.time())%RECORD_SECONDS != PAD_OVERLAP):
+		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_OVERLAP):
 		   data = stream.read(CHUNK)
 		   frame.append(data)
 		   wf.writeframes(b''.join(frame))
@@ -146,7 +157,7 @@ while True:
 
 		print("* still recording padding...")
 		framesOverlap = []
-		while (int(time.time())%RECORD_SECONDS != PAD_OVERLAP):
+		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_OVERLAP):
 			data = stream.read(CHUNK)
 			framesOverlap.append(data)
 
@@ -157,7 +168,3 @@ stream.stop_stream()
 stream.close()
 p.terminate()
 log.close();
-
-
-def isSilence(data):
-	return max(data) < THRESHOLD
