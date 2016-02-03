@@ -127,10 +127,6 @@ while not quitPressed():
 	wf.setframerate(RATE)
 	fileNames.append("archives/" + fileName)
 
-	# log file name
-	log.write("\n" + fileName + " \t")
-	log.flush()
-
 	# write +/-5 minutes from top of hour to file
 	wf.writeframes(b''.join(framesOverlap))
 
@@ -160,8 +156,8 @@ while not quitPressed():
 		# close audio file
 		wf.close()
 
-		# write time to log
-		log.write(time.asctime(localtime))
+		# write to log
+		log.write("\n" + fileName + " \t" + time.asctime(localtime))
 		log.flush()
 
 		output("* done recording: \tarchives/" + fileName)
