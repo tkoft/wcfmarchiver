@@ -129,6 +129,7 @@ while not quitPressed():
 
 	# log file name
 	log.write("\n" + fileName + " \t")
+	log.flush()
 
 	# write +/-5 minutes from top of hour to file
 	wf.writeframes(b''.join(framesOverlap))
