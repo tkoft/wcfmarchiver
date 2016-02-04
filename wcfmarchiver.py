@@ -54,6 +54,8 @@ count = 0
 hr = 24
 if not os.path.exists("archives"):
 	os.makedirs("archives")
+log = open("archives/outputLog.txt", "a+")
+out = open("out.txt", "a+")
 
 # load up files currently in archives directory
 readIn = os.listdir("archives")
@@ -68,20 +70,18 @@ fileNames.extend(readIn)
 
 # message printing; writes to stdout and out.txt
 def output(mes):
+	global out
 	print(mes)
-	out = open("out.txt", "a+")
-	out.write(mes + "\n")
-	out.close()
+	out.write(mes)
+	out.write("\n")
+	out.flush()
 
 # checks if quit key has been pressed before or now
 def quitPressed():
 	global quit
 	if (msvcrt.kbhit()):
-		if (ord(msvcrt.getch()) == 113):
-			stream.stop_stream()
-			stream.close()
-			p.terminate()
-			quit = True
+   		if (ord(msvcrt.getch()) == 113):
+   			quit = True
 	return quit
 
 # initialization info
@@ -157,10 +157,8 @@ while not quitPressed():
 		wf.close()
 
 		# write to log
-		log = open("archives/outputLog.txt", "a+")
 		log.write("\n" + fileName + " \t" + time.asctime(localtime))
-		log.close()
-
+		log.flush()
 
 		output("* done recording: \tarchives/" + fileName)
 		output("------------------------------------------------------------")
@@ -183,4 +181,8 @@ while not quitPressed():
 
 
 # CLEANUP:  Never runs, as of now.  
-
+stream.stop_stream()
+stream.close()
+p.terminate()
+log.close();
+out.close();
