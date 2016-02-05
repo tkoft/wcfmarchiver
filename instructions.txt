@@ -26,7 +26,7 @@ The Archiver is set to store only the last 200 hours of non-silent recordings be
 
 If you're having trouble finding the file from your show, open up "outputLog.txt" and find the file name in the left column that corresponds to the time of your show in the right column.  
 
-Here's the link to the Google Drive folder where the Archiver's recordings are uploaded.  Again, these get deleted when they are too old, so don't just "share" them or link to them, download them to your own storage or save them to your own Google Drive where they'll be safe from the Archiver's cleaning habits.
+The link above is to the Google Drive folder where the Archiver's recordings are uploaded.  Again, these get deleted when they are too old, so don't just "share" them or link to them, download them to your own storage or save them to your own Google Drive where they'll be safe from the Archiver's cleaning habits.
 
 If you're still having trouble, call, text, or email me - the Archiver may have been down or may have screwed up. Your show may not have been recorded, but I'll give him a kick and he'll learn to do better next time.  
 
