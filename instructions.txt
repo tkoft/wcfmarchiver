@@ -2,7 +2,7 @@
  INSTRUCTIONS FOR ACCESSING THE WCFM ARCHIVER
 ==============================================
 
-https://drive.google.com/a/williams.edu/folderview?id=0B1TfU5k139_wbkMzTjZFZWFXNDQ&usp=sharing
+LINK:   bit.ly/wcfmarchives
 
 ------------------------------
 	THE QUICK AND DIRTY
@@ -24,7 +24,7 @@ The WCFM Archiver records whatever is outputted from the broadcasting studio and
 
 The Archiver is set to store only the last 200 hours of non-silent recordings before overwriting the oldest recordings; even if the station were broadcasting audio 24/7, that would still be more than an entire week of recordings.  So you have plenty of time to grab the recording of your show before it is overwritten!  I'd recommend waiting at least an hour after your show before trying to download it though, just so the Archiver has time to finish recording and saving and uploading the file.
 
-If you're having trouble finding the file from your show, open up "outputLog.txt" and find the file name in the left column that corresponds to the time of your show in the right column.  
+If you're having trouble finding the file from your show, open up "outputLog.txt" and find the file name in the left column that corresponds to the time of your show in the right column.  Putting Google Drive in list view instead of tile view helps too.
 
 The link above is to the Google Drive folder where the Archiver's recordings are uploaded.  Again, these get deleted when they are too old, so don't just "share" them or link to them, download them to your own storage or save them to your own Google Drive where they'll be safe from the Archiver's cleaning habits.
 
