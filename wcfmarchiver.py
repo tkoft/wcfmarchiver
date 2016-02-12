@@ -12,12 +12,7 @@ Files are delimited modularly using epoch time. Examples:
 Files are named with specified name, the date, and the number of splits since the beginning of the day.
 Written to /archives.  Time of file write for all files can be foud in outputLog.txt.
 
-Deletes oldest files after max file number is reached.  Will only delete made during current instance of the program.
-
-Future features:
-	Currently, if program is stopped at top of interval +/- padding, new interval will not be saved, only old one. Fix this?
-	Some UI for inputting configs, or selecting default.  Maybe read from config file?
-	Some way to stop the program besides force closing it
+Deletes oldest files after max file number is reached, if option is chosen.
 
 (c) 2016 gary chen - for WCFM
 
@@ -28,23 +23,45 @@ import time
 import os.path
 import msvcrt
 from array import array
+import configparser
 
-# file write settings
-RECORD_MIN = 60
-PAD_MIN = 5
-WAVE_OUTPUT_FILENAME = "wcfm"
-MAX_FILES = 200
+# Create config.ini with defaults if doesn't exist
+config = configparser.ConfigParser()
 
-# recording settings
-RECORD_SECONDS = int(RECORD_MIN * 60)
-PAD_SEC = int(PAD_MIN * 60)
-CHUNK = 1024
-FORMAT = pyaudio.paInt16
-CHANNELS = 2
-RATE = 44100
-THRESHOLD = 250
+config['FILE'] = {
+	'RecordMin'  : '60',
+	'PadMin' : '5', 
+	'WaveOutputFilename':'wcfm',
+	'MaxFiles' : '200',
+	'DeleteOld' : 'False'}
+config['RECORD']  = {
+	'Chunk' : '1024', 
+	'Format' : '8', 		#pyaudio.paInt16 = 8
+	'Channels' : '2',
+	'Rate' : '44100',
+	'Threshold' : '333'}
+
+# Parse config.ini for configuration settings
+if (os.path.isfile("config.ini")):
+	config.read("config.ini")
+RECORD_MIN = int(config['FILE']['RecordMin'])
+PAD_MIN = int(config['FILE']['PadMin'])
+WAVE_OUTPUT_FILENAME = config['FILE']['WaveOutputFilename']
+MAX_FILES = int(config['FILE']['MaxFiles'])
+DELETE_OLD = config['FILE'].getboolean('DeleteOld')
+
+CHUNK = int(config['RECORD']['Chunk'])
+FORMAT = int(config['RECORD']['Format']) #pyaudio.paInt = 8
+CHANNELS = int(config['RECORD']['Channels'])
+RATE = int(config['RECORD']['Rate'])
+THRESHOLD = int(config['RECORD']['Threshold'])
+
+with open('config.ini', 'w') as configfile:
+	config.write(configfile)	
 
 # setup variables, data structs, files
+RECORD_SECONDS = int(RECORD_MIN * 60)
+PAD_SEC = int(PAD_MIN * 60)
 quit = False
 p = pyaudio.PyAudio()
 stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
@@ -58,12 +75,12 @@ log = open("archives/outputLog.txt", "a+")
 out = open("out.txt", "a+")
 
 # load up files currently in archives directory
-readIn = os.listdir("archives")
-readIn = ["archives/"+x for x in readIn if x.endswith(".wav")]
-if (len(readIn)>0):
-	delInput = input("Old recordings exist. Overwrite them to meet file limit if necessary? (y/n):  ")
-	if (not (delInput == "y" or delInput == "yes")):
-		readIn = []
+
+if (DELETE_OLD):
+	readIn = os.listdir("archives")
+	readIn = ["archives/"+x for x in os.listdir("archives") if x.endswith(".wav")]
+else:
+	readIn = []
 readIn.sort()
 fileNames = ([None]*(MAX_FILES - len(readIn)))
 fileNames.extend(readIn)
@@ -90,7 +107,9 @@ output("| WCFM ARCHIVER by Gary Chen '18")
 output("| init date: \t\t" + time.asctime(time.localtime(time.time())))
 output("| interval: \t\t" + str(RECORD_SECONDS/60) + " min")
 output("| padding: \t\t" + str(PAD_SEC/60) + " min")
+output("| silence threshold: \t" + str(THRESHOLD))
 output("| max # of files: \t" + str(MAX_FILES))
+output("| delete old files: \t" + str(DELETE_OLD))
 output("| approx size on disk: \t" + str(11*(RECORD_MIN+2*PAD_MIN)*MAX_FILES/1000) + " GB")
 output("------------------------------------------------------------")
 
@@ -112,7 +131,7 @@ while not quitPressed():
 		count = count + 1
 	fileName = WAVE_OUTPUT_FILENAME + "-" + formatHr + "-" + str(count).zfill(3) + ".wav"
 
-	# delete oldest file
+	# delete oldest file(s)
 	while (len(fileNames) >= MAX_FILES):
 		toDelete = fileNames.pop(0)
 		if (toDelete != None):
@@ -131,19 +150,34 @@ while not quitPressed():
 	wf.writeframes(b''.join(framesOverlap))
 
 	# write 55 min into the hour, or until keypress
-	maxVol = 1
+	maxVol = -1
 	while (not quitPressed() and int(time.time())%RECORD_SECONDS != (RECORD_SECONDS - PAD_SEC)):
 	   data = stream.read(CHUNK)
 	   frame.append(data)
+	   wf.writeframes(b''.join(frame))
+	   frame = []
+	   # silence detection; keept rack of max level		
 	   bitArr = array('h', data)
 	   bitArr.append(maxVol)
 	   maxVol = max(bitArr)
-	   wf.writeframes(b''.join(frame))
-	   frame = []
 
+	# silence detected
+	if (maxVol <= THRESHOLD):
+		# remove file
+		wf.close()
+		os.remove("archives/"+fileName)
+		fileNames.pop(len(fileNames)-1)
+		output("* DELETED SILENCE:  \tarchives/"+fileName)
+
+		#record padding for next file
+		output("* still recording padding...")
+		framesOverlap = []
+		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_SEC):
+			data = stream.read(CHUNK)
+			framesOverlap.append(data)
 
 	# no silence detected
-	if (maxVol >= THRESHOLD):
+	else:
 		# write +/-5 min at bottom of hour, and record into framesOverlap
 		framesOverlap = []
 		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_SEC):
@@ -162,25 +196,8 @@ while not quitPressed():
 
 		output("* done recording: \tarchives/" + fileName)
 		output("------------------------------------------------------------")
-	
-	# silence detected
-	else:
-		# remove file
-		wf.close()
-		os.remove("archives/"+fileName)
-		fileNames.pop(len(fileNames)-1)
-		output("* DELETED SILENCE:  \tarchives/"+fileName)
 
-		#record padding for next file
-		output("* still recording padding...")
-		framesOverlap = []
-		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_SEC):
-			data = stream.read(CHUNK)
-			framesOverlap.append(data)
-
-
-
-# CLEANUP:  Never runs, as of now.  
+# Cleanup  
 stream.stop_stream()
 stream.close()
 p.terminate()

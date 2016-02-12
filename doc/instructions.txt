@@ -1,0 +1,43 @@
+==============================================
+ INSTRUCTIONS FOR ACCESSING THE WCFM ARCHIVER
+==============================================
+
+LINK:   bit.ly/wcfmarchives
+
+------------------------------
+	THE QUICK AND DIRTY
+------------------------------
+
+Files are named with year, month, date, hour, and then file number for that hour (which should always be zero):
+	wcfm-YYYY-MM-DD-HH-###.wav
+
+Only 200 shows (more than a week of 24/7 programming) are stored at a time, so download your recording within a week of broadcasting.
+
+If you want to share, download then share it yourself - don't share from the Archiver's Google Drive folder, or you will be sad.
+
+
+-------------------------------
+	MORE DETAIL
+-------------------------------
+
+The WCFM Archiver records whatever is outputted from the broadcasting studio and saves it on an hourly basis.  Each file should correspond to one hour, +/- 5 min just in case (e.g. the file for 15:00 contains whatever was broadcasted from 14:55 to 16:05).
+
+The Archiver is set to store only the last 200 hours of non-silent recordings before overwriting the oldest recordings; even if the station were broadcasting audio 24/7, that would still be more than an entire week of recordings.  So you have plenty of time to grab the recording of your show before it is overwritten!  I'd recommend waiting at least an hour after your show before trying to download it though, just so the Archiver has time to finish recording and saving and uploading the file.
+
+If you're having trouble finding the file from your show, open up "outputLog.txt" and find the file name in the left column that corresponds to the time of your show in the right column.  Putting Google Drive in list view instead of tile view helps too.
+
+The link above is to the Google Drive folder where the Archiver's recordings are uploaded.  Again, these get deleted when they are too old, so don't just "share" them or link to them, download them to your own storage or save them to your own Google Drive where they'll be safe from the Archiver's cleaning habits.
+
+If you're still having trouble, call, text, or email me - the Archiver may have been down or may have screwed up. Your show may not have been recorded, but I'll give him a kick and he'll learn to do better next time.  
+
+This is still kind of a test period for the Archiver, so if you're REALLY counting on your show to be recorded, I'd still record it yourself using another method; ask me if you want to know how.  
+
+
+Happy broadcasting, radio nerds!
+
+Gary Chen '18
+WCFM Tech Director
+gc5@williams.edu
+757.338.1148
+
+ 
