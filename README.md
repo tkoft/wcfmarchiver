@@ -58,7 +58,7 @@ Recording settings that can be specified in the config file:
 |DeleteOld|`False`|Delete files from previous instance of program if necessary.  Defaults false to be safe, but should probably be changed to true.|
 |Threshold|`333`|Silence threshold, not sure what units are.|
 
-**NOTE:** `DeleteOld` does NOT specify whether files are deleted once the limit is reached.  It specified whether .wav files that were in the archives directory _before the program was started_ should be indexed and deleted as well.  See _7. File Limit_ below.
+**NOTE:** `DeleteOld` does NOT specify whether files are deleted once the limit is reached.  It specifies whether .wav files that were in the archives directory _before the program was started_ should be indexed and deleted as well.  See _7. File Limit_ below.
 
  File settings that can be specified in the config file:
 
