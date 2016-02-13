@@ -86,3 +86,6 @@ The control loop is maybe better shown like this:
   * Else write stream to both file and internal storage until (interval end + padding amount).
 6. Write to output log, rinse and repeat
 
+
+All output from the program is saved to `out.txt`.  This is the actual program output, not the archive log.
+
