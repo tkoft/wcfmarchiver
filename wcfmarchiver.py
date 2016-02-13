@@ -49,12 +49,12 @@ PAD_MIN = float(config['FILE']['PadMin'])
 WAVE_OUTPUT_FILENAME = config['FILE']['WaveOutputFilename']
 MAX_FILES = int(config['FILE']['MaxFiles'])
 DELETE_OLD = config['FILE'].getboolean('DeleteOld')
+THRESHOLD = int(config['FILE']['Threshold'])
 
 CHUNK = int(config['RECORD']['Chunk'])
 FORMAT = int(config['RECORD']['Format']) #pyaudio.paInt = 8
 CHANNELS = int(config['RECORD']['Channels'])
 RATE = int(config['RECORD']['Rate'])
-THRESHOLD = int(config['RECORD']['Threshold'])
 
 with open('config.ini', 'w') as configfile:
 	config.write(configfile)	
