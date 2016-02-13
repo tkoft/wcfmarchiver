@@ -44,8 +44,8 @@ config['RECORD']  = {
 # Parse config.ini for configuration settings
 if (os.path.isfile("config.ini")):
 	config.read("config.ini")
-RECORD_MIN = int(config['FILE']['RecordMin'])
-PAD_MIN = int(config['FILE']['PadMin'])
+RECORD_MIN = float(config['FILE']['RecordMin'])
+PAD_MIN = float(config['FILE']['PadMin'])
 WAVE_OUTPUT_FILENAME = config['FILE']['WaveOutputFilename']
 MAX_FILES = int(config['FILE']['MaxFiles'])
 DELETE_OLD = config['FILE'].getboolean('DeleteOld')
@@ -138,6 +138,10 @@ while not quitPressed():
 			os.remove(toDelete)
 			output("* DELETED: \t\t" + toDelete)
 
+	# delete temp file
+	if (os.path.isfile("archives/temp.wav")):
+		os.remove("archives/temp.wav")
+
 	# open file
 	output("* now writing to: \tarchives/" + fileName)
 	wf = wave.open("archives/" + fileName, 'wb')
@@ -169,23 +173,31 @@ while not quitPressed():
 		fileNames.pop(len(fileNames)-1)
 		output("* DELETED SILENCE:  \tarchives/"+fileName)
 
-		#record padding for next file
+		#record padding to temp and for next file
+		wf = wave.open("archives/temp.wav", 'wb')
+		wf.setnchannels(CHANNELS)
+		wf.setsampwidth(p.get_sample_size(FORMAT))
+		wf.setframerate(RATE)
 		output("* still recording padding...")
 		framesOverlap = []
 		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_SEC):
 			data = stream.read(CHUNK)
+			frame.append(data)
+			wf.writeframes(b''.join(frame))
+			frame = []
 			framesOverlap.append(data)
+		wf.close()
 
 	# no silence detected
 	else:
 		# write +/-5 min at bottom of hour, and record into framesOverlap
 		framesOverlap = []
 		while (not quitPressed() and int(time.time())%RECORD_SECONDS != PAD_SEC):
-		   data = stream.read(CHUNK)
-		   frame.append(data)
-		   wf.writeframes(b''.join(frame))
-		   frame = []
-		   framesOverlap.append(data)
+			data = stream.read(CHUNK)
+			frame.append(data)
+			wf.writeframes(b''.join(frame))
+			frame = []
+			framesOverlap.append(data)
 
 		# close audio file
 		wf.close()

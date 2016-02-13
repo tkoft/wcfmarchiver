@@ -72,7 +72,7 @@ Recording settings that can be specified in the config file:
 ### 10. Termination
 The program clean-exits at any time using the 'q' key.  Lowercase only right now, lol.  It will execute the rest of the main control loop, skipping recording loops, close all streams and files, stop recording, still check for silence and delete if silent.
 
-ONE CAVEAT:  If the program is closed or terminated, unexpectedly or not, during the padding interval after a silent recording that was deleted, anything recorded during that padding will NOT be saved.  This could be solved by writing to a temp file and deleting it at the top of loop.
+ONE CAVEAT:  If the program is closed or terminated, unexpectedly or not, during the padding interval after a silent recording that was deleted, anything recorded during that padding will be saved in `temp.wav`.  Basically, whenever the program says "DELETED: filename.wav, still recording padding..." it writes to `temp.wav` until the next file starts, then deletes it since it's saved in the new file.  `temp.wav` only exists to save this bit of audio in case the program terminates.
 
 ### Extraneous Info
 
