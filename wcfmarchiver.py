@@ -33,13 +33,13 @@ config['FILE'] = {
 	'PadMin' : '5', 
 	'WaveOutputFilename':'wcfm',
 	'MaxFiles' : '200',
-	'DeleteOld' : 'False'}
+	'DeleteOld' : 'False',
+	'Threshold' : '333',}
 config['RECORD']  = {
 	'Chunk' : '1024', 
 	'Format' : '8', 		#pyaudio.paInt16 = 8
 	'Channels' : '2',
-	'Rate' : '44100',
-	'Threshold' : '333'}
+	'Rate' : '44100',}
 
 # Parse config.ini for configuration settings
 if (os.path.isfile("config.ini")):
