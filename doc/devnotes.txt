@@ -3,5 +3,3 @@ Ideas:
 Specify max files and max size on disk?  Or max amount of time, and use some math to get #files or size on disk.
 
 Lowercase and uppercase q to quit
-
-If the program is closed or terminated, unexpectedly or not, during the padding interval after a silent recording that was deleted, anything recorded during that padding will NOT be saved.  This could be solved by writing to a temp file and deleting it at the top of loop.
