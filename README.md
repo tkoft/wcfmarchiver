@@ -1,7 +1,7 @@
 # The WCFM Archival Tool
 https://github.com/tkoft/wcfmarchiver
 
-[bit.ly/WCFMarchives](http://bit.ly/wcfmarchives)
+[bit.ly/WCFMarchives](http://bit.ly/WCFMarchives)
 
 #### Overview
 The WCFM Archiver:
