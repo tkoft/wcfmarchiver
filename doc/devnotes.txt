@@ -3,3 +3,5 @@ Ideas:
 Specify max files and max size on disk?  Or max amount of time, and use some math to get #files or size on disk.
 
 Lowercase and uppercase q to quit
+
+Create buffer/queue function for stream, start in parallel process and pop from queue when writing.  So one process handles reading the stream, is never interrupted, other process controls flow of program and writing to file/padding.
