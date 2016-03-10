@@ -5,3 +5,6 @@ Specify max files and max size on disk?  Or max amount of time, and use some mat
 Lowercase and uppercase q to quit
 
 Create buffer/queue function for stream, start in parallel process and pop from queue when writing.  So one process handles reading the stream, is never interrupted, other process controls flow of program and writing to file/padding.
+
+This: http://stackoverflow.com/questions/4675728/redirect-stdout-to-a-file-in-python
+Figure why the program keeps stopping!
