@@ -1,1 +1,1 @@
-pyinstaller -F wcfmarchiver.py
+pyinstaller -F wcfmarchiver.py --icon=iconWCFM.ico
