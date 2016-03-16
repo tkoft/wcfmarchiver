@@ -19,7 +19,7 @@ The WCFM Archiver:
 
 ## More Details
 ### 1. About the Script
-It's a single file, `wcfmarchiver.py`.  It can be packaged as a .exe executable using pyinstaller (try `makeexe.bat`).
+It's a single file, `wcfmarchiver.py`.  It can be packaged as a .exe executable using pyinstaller (try `makeexe.bat`).  Look in the `dist` directory.
   
 ### 2. Libraries
 [PyAudio website](https://people.csail.mit.edu/hubert/pyaudio/).  Other standard libraries used:  `wave, time, os.path, msvcrt, array, configparser`
